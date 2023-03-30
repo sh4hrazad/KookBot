@@ -2,7 +2,7 @@
 using KookBot.Enums;
 using KookBot.Structs;
 
-namespace KookBot.Singletons; 
+namespace KookBot.Interfaces; 
 
 public interface IKookHttpBot {
         public static IKookHttpBot Instance => DependencyInjection.Get<IKookHttpBot>();

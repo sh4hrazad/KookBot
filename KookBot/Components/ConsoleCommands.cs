@@ -1,12 +1,13 @@
-﻿using KookBot.Enums;
-using KookBot.Singletons;
+﻿using KookBot.Attributes;
+using KookBot.Enums;
+using KookBot.Interfaces;
 
 namespace KookBot.Components; 
 
 public class ConsoleCommands {
         [ConsoleCommand("ping")]
         public static void Ping(string[] args) {
-                Console.WriteLine("Nya!~");
+                Console.WriteLine("pong");
         }
 
         [ConsoleCommand("say")]

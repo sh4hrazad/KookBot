@@ -1,7 +1,7 @@
 ﻿using KookBot.Components;
 using TouchSocket.Core;
 
-namespace KookBot.Singletons; 
+namespace KookBot.Interfaces; 
 
 public interface IKookWsBot {
         public static IKookWsBot Instance = DependencyInjection.Get<IKookWsBot>();

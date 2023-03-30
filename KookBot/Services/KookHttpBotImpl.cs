@@ -2,10 +2,11 @@
 using System.Net.Http.Json;
 using System.Text;
 using KookBot.Enums;
+using KookBot.Interfaces;
 using KookBot.Structs;
 using TouchSocket.Core;
 
-namespace KookBot.Singletons;
+namespace KookBot.Services;
 
 public class KookHttpBotImpl : IKookHttpBot {
         private const string ApiBaseUrl = "https://www.kookapp.cn";

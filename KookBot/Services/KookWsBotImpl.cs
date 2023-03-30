@@ -1,9 +1,12 @@
-﻿using KookBot.Components;
+﻿using System.Reflection;
+using KookBot.Attributes;
+using KookBot.Components;
+using KookBot.Interfaces;
 using TouchSocket.Core;
 using TouchSocket.Http.WebSockets;
 using TouchSocket.Sockets;
 
-namespace KookBot.Singletons; 
+namespace KookBot.Services; 
 
 public class KookWsBotImpl : IKookWsBot {
         private readonly WebSocketClient _client = new();
