@@ -9,7 +9,7 @@ public interface ICommandHandler {
 
         public event EventHandler OnKilled;
 
-        public InvokeResult TryInvokeCommand(CommandType type, string command);
+        public InvokeResult TryInvokeCommand(CommandType type, string command, object? json);
         
         public ICommandHandler RegisterConsoleCommands<TClass>();
         

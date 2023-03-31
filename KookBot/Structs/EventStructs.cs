@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using KookBot.Enums;
 
+// ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable NotAccessedPositionalProperty.Global
 
 namespace KookBot.Structs;

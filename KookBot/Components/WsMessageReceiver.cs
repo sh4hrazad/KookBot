@@ -1,6 +1,4 @@
 ﻿using System.IO.Compression;
-using System.Reflection;
-using KookBot.Attributes;
 using KookBot.Enums;
 using KookBot.Interfaces;
 using KookBot.Structs;
@@ -10,14 +8,12 @@ using TouchSocket.Http.WebSockets;
 namespace KookBot.Components;
 
 public class WsMessageReceiver : WebSocketPluginBase<WebSocketClient> {
-        public IDictionary<string, MethodInfo> Methods { get; } = new Dictionary<string, MethodInfo>();
-
         protected override Task OnHandleWSDataFrameAsync(WebSocketClient client, WSDataFrameEventArgs e) {
                 return base.OnHandleWSDataFrameAsync(client, e);
         }
 
         protected override void OnHandleWSDataFrame(WebSocketClient client, WSDataFrameEventArgs e) {
-                string data = string.Empty;
+                var data = string.Empty;
 
                 // inflate compressed data
                 if (e.DataFrame.Opcode == WSDataType.Binary) {
@@ -27,20 +23,26 @@ public class WsMessageReceiver : WebSocketPluginBase<WebSocketClient> {
                 if (string.IsNullOrEmpty(data)) {
                         return;
                 }
+                
+                // TODO: we should fix those exceptions on parsing json
+                IKookWsBot.Instance.Info($"Websocket Event Received! {data}");
 
                 var json = data.FromJson<WebSocketResult<WebsocketEventData>>();
 
                 if (json.Signal == WebsocketSignal.Event) {
-                        var content = json?.Data.Content ?? string.Empty;
+                        var content = json.Data.Content;
 
                         if (
-                                json!.Data.Type == MessageType.Text && IsCallingCommand(content)
+                                (json.Data.Type == MessageType.Text || json.Data.Type == MessageType.KMarkdown) &&
+                                IsCallingCommand(content)
                         ) {
-                                ICommandHandler.Instance.TryInvokeCommand(CommandType.Chat, content);
+                                ICommandHandler.Instance.TryInvokeCommand(CommandType.Chat, content, json);
                         }
 
                         IKookWsBot.Instance.Info(
-                                $"{json.Data.Extra.Author.Nickname} ({json.Data.Extra.Author.Username}#{json.Data.Extra.Author.IdentifyNum}): {content}"
+                                $"""
+                                {json.Data.Extra.Author.Nickname} ({json.Data.Extra.Author.Username}#{json.Data.Extra.Author.IdentifyNum}): {content}
+                                """
                         );
                 }
         }

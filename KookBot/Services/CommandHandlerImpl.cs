@@ -47,7 +47,7 @@ public class CommandHandlerImpl : ICommandHandler {
                 return thisClass;
         }
 
-        public InvokeResult TryInvokeCommand(CommandType type, string command) {
+        public InvokeResult TryInvokeCommand(CommandType type, string command, object? json = null) {
                 var split = command.Split(" ");
 
                 var methods = type switch {
@@ -56,11 +56,16 @@ public class CommandHandlerImpl : ICommandHandler {
                         _ => null,
                 };
 
-                if (methods != null && methods.TryGetValue(split[0], out var method)) {
-                        return new InvokeResult(true, method?.Invoke(null, new object?[] { split }));
+                if (type == CommandType.Chat) {
+                        // remove "!", "/", "."
+                        split[0] = split[0].Remove(0, 1);
                 }
 
-                return new InvokeResult();
+                if (methods != null && methods.TryGetValue(split[0], out var method)) {
+                        return new(true, method?.Invoke(null, new object?[] { split, json }));
+                }
+
+                return new();
         }
 
         public void StartCommandListener() {
